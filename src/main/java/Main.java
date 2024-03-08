@@ -168,8 +168,7 @@ public class Main {
 
 
     }
-
-    private static void loginScreen(){
+    public static void main(String[] args) {
         try (Connection connection = DatabaseManager.getConnection()) {
 
             LoginController loginController = new LoginController();
@@ -194,21 +193,5 @@ public class Main {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-    public static void main(String[] args) {
-        try (Connection connection = DatabaseManager.getConnection()) {
-            System.out.println("Connected to the database.");
-
-            LoginController loginController = new LoginController();
-            Scanner scanner = new Scanner(System.in);
-
-            loginScreen(connection, loginController, scanner);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void loginScreen(Connection connection, LoginController loginController, Scanner scanner) {
     }
 }
