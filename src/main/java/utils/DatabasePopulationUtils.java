@@ -8,13 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 
-/**
- * Used to generate the data in the table that has specified in the application.properties file
- *
- *
- * @author keo
- */
-
 public class DatabasePopulationUtils {
     private static final long SEEDVALUE = 123456L;
     private static final Faker faker = new Faker(new Random(SEEDVALUE));

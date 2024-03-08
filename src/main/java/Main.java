@@ -1,12 +1,16 @@
-import com.github.javafaker.Faker;
+import controller.LoginController;
+import model.DatabaseManager;
 import model.Person;
+import model.User;
 import repository.PersonRepository;
 import service.PersonService;
 import utils.TableUtils;
+import view.ConsoleView;
 import view.MainView;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.ThreadFactory;
 //        Person person = new Person(1001,"james ","male","james@gmail.com","cambodia");
 
 //        Person person = Person.builder()
@@ -34,10 +38,11 @@ import java.util.concurrent.ThreadFactory;
 //        );
 
 public class Main {
+
     private static PersonService personService =
             new PersonService(new PersonRepository());
 
-    public static void main(String[] args) {
+    public static void displayMenu(){
         Scanner input = new Scanner(System.in);
         int option;
         do {
@@ -151,14 +156,59 @@ public class Main {
                 }
                 break;
                 case 6:
+                    return;
+                case 7:
                     System.out.println("Exit from the program!!! ");
                     break;
                 default:
                     System.out.println("Invalid Option!!!!!! ");
                     break;
             }
-        } while (option != 6);
+        } while (option != 7);
 
 
+    }
+
+    private static void loginScreen(){
+        try (Connection connection = DatabaseManager.getConnection()) {
+
+            LoginController loginController = new LoginController();
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.print("Enter your username: ");
+            String username = scanner.nextLine();
+
+            System.out.print("Enter your password: ");
+            String password = scanner.nextLine();
+
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+
+            if (loginController.authenticateUser(connection, user)) {
+                System.out.println("Login successful! Welcome, " + user.getUsername() + "!");
+                displayMenu();
+            } else {
+                System.out.println("Invalid username or password.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void main(String[] args) {
+        try (Connection connection = DatabaseManager.getConnection()) {
+            System.out.println("Connected to the database.");
+
+            LoginController loginController = new LoginController();
+            Scanner scanner = new Scanner(System.in);
+
+            loginScreen(connection, loginController, scanner);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void loginScreen(Connection connection, LoginController loginController, Scanner scanner) {
     }
 }
